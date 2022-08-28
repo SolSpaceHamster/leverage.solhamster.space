@@ -30,6 +30,8 @@ import { BrowserTracing } from '@sentry/tracing'
 
 import { WalletProvider, WalletListener } from 'components/WalletAdapter'
 import {
+  BackpackWalletAdapter,
+  CoinbaseWalletAdapter,
   ExodusWalletAdapter,
   PhantomWalletAdapter,
   SolflareWalletAdapter,
@@ -41,6 +43,7 @@ import {
 import { HuobiWalletAdapter } from '@solana/wallet-adapter-huobi'
 import useSpotBalances from 'hooks/useSpotBalances'
 import Layout from 'components/Layout'
+import Script from 'next/script'
 
 const SENTRY_URL = process.env.NEXT_PUBLIC_SENTRY_URL
 if (SENTRY_URL) {
@@ -146,6 +149,8 @@ const PageTitle = () => {
 function App({ Component, pageProps }) {
   const wallets = useMemo(
     () => [
+      new BackpackWalletAdapter(),
+      new CoinbaseWalletAdapter(),
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
       new ExodusWalletAdapter(),
@@ -193,6 +198,19 @@ function App({ Component, pageProps }) {
         <meta name="google" content="notranslate" />
         <link rel="manifest" href="/manifest.json"></link>
       </Head>
+      <Script
+        strategy="lazyOnload"
+        src="https://www.googletagmanager.com/gtag/js?id=G-DH0283BKHZ"
+      ></Script>
+      <Script strategy="lazyOnload">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-DH0283BKHZ');
+        `}
+      </Script>
       <ThemeProvider defaultTheme="Mango">
         <ErrorBoundary>
           <WalletProvider wallets={wallets}>
