@@ -13,6 +13,7 @@ import {
   ExclamationCircleIcon,
   GiftIcon,
   LinkIcon,
+  PencilIcon,
   SwitchHorizontalIcon,
   TrashIcon,
   UsersIcon,
@@ -165,7 +166,8 @@ export default function Account() {
             state.selectedMangoAccount.current = unOwnedMangoAccount
             state.selectedMangoAccount.initialLoad = false
           })
-          actions.fetchTradeHistory()
+          await actions.fetchTradeHistory()
+          await fetchProfileDetails(unOwnedMangoAccount.owner.toString())
           setResetOnLeave(true)
         }
       } catch (error) {
@@ -296,12 +298,6 @@ export default function Account() {
     }
   }
 
-  useEffect(() => {
-    if (mangoAccount && pubkey) {
-      fetchProfileDetails(mangoAccount.owner.toString())
-    }
-  }, [mangoAccount, pubkey])
-
   return (
     <div className="pt-6">
       <div className="flex flex-col pb-4 lg:flex-row lg:items-end lg:justify-between">
@@ -430,6 +426,17 @@ export default function Account() {
                               </button>
                             </Menu.Item>
                           ) : null}
+                          <Menu.Item>
+                            <button
+                              className="flex w-full flex-row items-center rounded-none py-0.5 font-normal focus:outline-none md:hover:cursor-pointer md:hover:text-th-primary"
+                              onClick={() => setShowNameModal(true)}
+                            >
+                              <div className="flex items-center">
+                                <PencilIcon className="mr-1.5 h-4 w-4" />
+                                {t('edit-account-name')}
+                              </div>
+                            </button>
+                          </Menu.Item>
                           <Menu.Item>
                             <button
                               className="flex w-full flex-row items-center rounded-none py-0.5 font-normal focus:outline-none md:hover:cursor-pointer md:hover:text-th-primary"

@@ -11,7 +11,10 @@ import { I80F48 } from '@blockworks-foundation/mango-client'
 import shallow from 'zustand/shallow'
 
 useMangoStore.subscribe(
-  (state) => state.selectedMangoAccount.lastUpdatedAt,
+  (state) => [
+    state.selectedMangoAccount.current,
+    state.selectedMangoAccount.lastUpdatedAt,
+  ],
   () => {
     const mangoAccount = useMangoStore.getState().selectedMangoAccount.current
     const mangoGroup = useMangoStore.getState().selectedMangoGroup.current
@@ -21,7 +24,6 @@ useMangoStore.subscribe(
     if (!mangoAccount || !mangoGroup || !mangoCache) {
       return
     }
-    console.time('updating spot bal start')
     const balances: SpotBalance[][] = []
 
     for (const {
@@ -181,7 +183,6 @@ useMangoStore.subscribe(
         },
       ])
     })
-    console.timeEnd('updating spot bal start')
   },
   { equalityFn: shallow }
 )
